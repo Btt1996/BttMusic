@@ -16,7 +16,7 @@ jobs:
         run: |
           find . -name '*.png.b64' | while read -r f; do
             out="${f%.b64}"
-            base64 -d "$f" > "$out.tmp" && mv "$out.tmp" "$out" && rm "$f"
+            base64 -d < "$f" > "$out.tmp" && mv "$out.tmp" "$out" && rm "$f"
           done
           file ios-btt-music/BttMusic/Assets.xcassets/AppIcon.appiconset/icon.png | grep -q 'PNG image data'
 
