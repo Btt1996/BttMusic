@@ -1,0 +1,13 @@
+{
+  "apps": [
+    {
+      "name": "Btt Music",
+      "path": "ios-btt-music",
+      "framework": "swift",
+      "settings": {
+        "swiftSibling": false
+      }
+    }
+  ],
+  "$schema": "https://rork.com/schema/rork.json"
+}

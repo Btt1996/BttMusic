@@ -1,0 +1,23 @@
+{
+  "name": "BT Midnight",
+  "palette": {
+    "canvas": "#0A0E1A",
+    "surface": "#141B2E",
+    "surfaceRaised": "#1D2740",
+    "accentA": "#4F46E5",
+    "accentB": "#22D3EE",
+    "accentC": "#34D399",
+    "textPrimary": "#F8FAFC",
+    "textSecondary": "#F8FAFC99",
+    "textTertiary": "#F8FAFC59"
+  },
+  "displayFontDesign": "rounded",
+  "bodyFontDesign": "serif",
+  "cardCornerRadius": 16,
+  "artworkCornerRadius": 8,
+  "featureFlags": {
+    "youtube": true,
+    "remix": true,
+    "x2": true
+  }
+}
