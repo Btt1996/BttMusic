@@ -34,6 +34,24 @@ ios-btt-music/BttMusic/
 3. Run on an iOS 18+ simulator or device. Background audio (`UIBackgroundModes: audio`)
    is already configured in build settings.
 
+### GitHub Actions: unsigned device IPA (no Apple account needed)
+
+Run **Actions → Build Unsigned IPA → Run workflow** on `main`. The workflow
+(`.github/workflows/build-unsigned-ipa.yml`) on a GitHub-hosted macOS runner:
+
+1. decodes the base64 binary assets (PNGs are stored as `.png.b64` because the
+   repo was pushed through an API that only writes text files);
+2. archives the app for `generic/platform=iOS` (arm64 devices) with
+   `CODE_SIGNING_ALLOWED=NO`;
+3. verifies the binary is a real **iOS-device** build (`lipo` arm64 + `vtool`
+   `platform iOS`, explicitly rejecting `iossimulator`), the bundle id is
+   `com.ahmed.btmu`, and `ShareExtension.appex` is embedded;
+4. uploads **`BttMusic-Unsigned.ipa`** as a run artifact — download it from the
+   run page on your iPhone and sign/install with Sideloadly, AltStore or
+   TrollStore.
+
+On a Mac you can do the same locally: `./scripts/make-unsigned-ipa.sh`.
+
 ## Features
 
 ### Music engine
