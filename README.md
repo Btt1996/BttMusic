@@ -44,7 +44,8 @@ Run **Actions → Build Unsigned IPA → Run workflow** on `main`. The workflow
 2. archives the app for `generic/platform=iOS` (arm64 devices) with
    `CODE_SIGNING_ALLOWED=NO`;
 3. verifies the binary is a real **iOS-device** build (`lipo` arm64 + `vtool`
-   `platform iOS`, explicitly rejecting `iossimulator`), the bundle id is
+   Mach-O platform 2 = iOS, explicitly rejecting platform 7 = iossimulator),
+   the bundle id is
    `com.ahmed.btmu`, and `ShareExtension.appex` is embedded;
 4. uploads **`BttMusic-Unsigned.ipa`** as a run artifact — download it from the
    run page on your iPhone and sign/install with Sideloadly, AltStore or
