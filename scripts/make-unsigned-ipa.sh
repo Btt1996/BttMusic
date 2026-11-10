@@ -53,8 +53,9 @@ APP_PATH="$BUILD_DIR/BttMusic.xcarchive/Products/Applications/BttMusic.app"
 
 # --- Verify this is a real iOS DEVICE binary, not a simulator one -----------
 # Note: on Apple silicon, simulator slices are also arm64, so lipo alone is
-# not enough. The Mach-O LC_BUILD_VERSION load command names the platform:
-# "iOS" for device, "iossimulator" for the simulator.
+# not enough. The Mach-O LC_BUILD_VERSION load command carries a numeric
+# platform code: 2 = iOS device, 7 = iossimulator (vtool -show-build prints
+# ` platform 2`, with a leading space).
 echo "==> Verifying device slices (arm64 + platform iOS)"
 BINARY="$APP_PATH/BttMusic"
 
@@ -63,13 +64,16 @@ lipo -info "$BINARY" | tee /dev/stderr | grep -q "arm64" || {
   exit 1
 }
 
-PLATFORMS="$(vtool -show-build "$BINARY" | grep -E '^platform ' | sort -u)" || true
-echo "$PLATFORMS" | tee /dev/stderr | grep -qE '^platform iOS$' || {
-  echo "ERROR: build platform is not iOS-device (got: $PLATFORMS)" >&2
+PLATFORMS="$(vtool -show-build "$BINARY" | grep -E '^ *platform ' | sed 's/^ *//' | sort -u)" || true
+echo "Build platforms found:"
+echo "$PLATFORMS" | tee /dev/stderr
+
+echo "$PLATFORMS" | grep -qE '^platform 2$' || {
+  echo "ERROR: binary is not an iOS-device build (Mach-O platform must be 2 = iOS; got: $PLATFORMS)" >&2
   exit 1
 }
-if echo "$PLATFORMS" | grep -q iossimulator; then
-  echo "ERROR: binary is a simulator build" >&2
+if echo "$PLATFORMS" | grep -qE '^platform 7$'; then
+  echo "ERROR: binary is a simulator build (platform 7 = iossimulator)" >&2
   exit 1
 fi
 

@@ -36,12 +36,13 @@ jobs:
           ./scripts/make-unsigned-ipa.sh
 
       # Belt and braces: re-verify the artifact independently of the script.
-      - name: Verify device binary (arm64, platform iOS, not simulator)
+      - name: Verify device binary (arm64, iOS-device platform, not simulator)
         run: |
           APP=build/BttMusic.xcarchive/Products/Applications/BttMusic.app
           lipo -info "$APP/BttMusic" | tee /dev/stderr | grep -q arm64
-          vtool -show-build "$APP/BttMusic" | tee /dev/stderr | grep -qE '^platform iOS$'
-          ! vtool -show-build "$APP/BttMusic" | grep -q iossimulator
+          # Mach-O platform codes: 2 = iOS device, 7 = iossimulator
+          vtool -show-build "$APP/BttMusic" | tee /dev/stderr | grep -qE '^ *platform 2$'
+          ! vtool -show-build "$APP/BttMusic" | grep -qE '^ *platform 7$'
 
       - name: Verify bundle ID and embedded Share Extension
         run: |
