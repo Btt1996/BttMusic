@@ -41,9 +41,9 @@ jobs:
           APP=build/BttMusic.xcarchive/Products/Applications/BttMusic.app
           lipo -info "$APP/BttMusic" | tee /dev/stderr | grep -q arm64
           # Mach-O platform codes: 2 = iOS device, 7 = iossimulator
-          vtool -show-build "$APP/BttMusic" | tee /dev/stderr | grep -qE '^ *platform 2$'
-          ! vtool -show-build "$APP/BttMusic" | grep -qE '^ *platform 7$'
-
+          vtool -show-build "$APP/BttMusic" | tee /dev/stderr | grep -qE '^ *platform (IOS|2)$'
+          ! vtool -show-build "$APP/BttMusic" | grep -qE '^ *platform (IOSSIMULATOR|7)$'
+          
       - name: Verify bundle ID and embedded Share Extension
         run: |
           APP=build/BttMusic.xcarchive/Products/Applications/BttMusic.app
