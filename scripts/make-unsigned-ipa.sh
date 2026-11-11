@@ -68,15 +68,14 @@ PLATFORMS="$(vtool -show-build "$BINARY" | grep -E '^ *platform ' | sed 's/^ *//
 echo "Build platforms found:"
 echo "$PLATFORMS" | tee /dev/stderr
 
-echo "$PLATFORMS" | grep -qE '^platform 2$' || {
-  echo "ERROR: binary is not an iOS-device build (Mach-O platform must be 2 = iOS; got: $PLATFORMS)" >&2
+echo "$PLATFORMS" | grep -qE '^platform (IOS|2)$' || {
+  echo "ERROR: binary is not an iOS-device build (expected platform IOS or 2; got: $PLATFORMS)" >&2
   exit 1
 }
-if echo "$PLATFORMS" | grep -qE '^platform 7$'; then
-  echo "ERROR: binary is a simulator build (platform 7 = iossimulator)" >&2
+if echo "$PLATFORMS" | grep -qE '^platform (IOSSIMULATOR|7)$'; then
+  echo "ERROR: binary is a simulator build (IOSSIMULATOR / platform 7)" >&2
   exit 1
 fi
-
 # Sanity: bundle IDs and the embedded Share Extension must be intact.
 plutil -extract CFBundleIdentifier raw "$APP_PATH/Info.plist" | grep -qx "com.ahmed.btmu" || {
   echo "ERROR: unexpected app bundle identifier" >&2
